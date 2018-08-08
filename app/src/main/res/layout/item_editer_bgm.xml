@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="#1F2531"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/ic_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_music_default" />
+
+    <FrameLayout
+        android:id="@+id/layout_use"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <Button
+            android:id="@+id/btn_use"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_choose_disable"
+            android:text="@string/download"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <ProgressBar
+            android:id="@+id/bar_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminateOnly="false"
+            android:max="100"
+            android:progress="70"
+            android:progressDrawable="@drawable/bgm_download_progress" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/bgm_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/layout_use"
+        android:layout_toRightOf="@id/ic_cover"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/h8"
+        tools:text="music name" />
+</RelativeLayout>

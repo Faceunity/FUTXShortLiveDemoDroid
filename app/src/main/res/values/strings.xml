@@ -1,0 +1,339 @@
+<resources>
+    <string name="app_name">小视频</string>
+
+    <!-- login re fragment-->
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="tencent_tls_ui_independentLoginTitle">用户名登录</string>
+    <string name="tencent_tls_ui_independentRegisterTitle">用户名注册</string>
+
+    <string name="action_settings">settings</string>
+
+    <string name="btn_take_photo">拍照</string>
+    <string name="btn_pic_photo">从手机相册选择</string>
+    <string name="btn_return_home">返回首页</string>
+    <string name="btn_return">返回</string>
+    <string name="btn_save">保存</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_refuse">拒绝</string>
+    <string name="btn_agree">同意</string>
+    <string name="btn_sure">确定</string>
+    <string name="btn_close">关闭</string>
+
+    <string name="error_code_prefix">错误码：</string>
+
+    <!--loginActivity -->
+    <string name="activity_login_login">登录</string>
+    <string name="activity_login_phone_login">手机号登录</string>
+    <string name="activity_login_normal_login">用户名登录</string>
+    <string name="activity_login_register">注册新用户</string>
+    <string name="activity_login_guest_login">游客模式</string>
+    <string name="activity_login_username">用户名</string>
+    <string name="activity_login_verify_code">获取验证码</string>
+    <string name="activity_login_verify_code_edit">验证码</string>
+    <string name="activity_login_phone_num">手机号</string>
+    <string name="activity_login_password">密码</string>
+    <!--loginActivity -->
+
+    <!--registerActivity -->
+    <string name="activity_register_phone_register">手机注册</string>
+    <string name="activity_register_normal_register">用户名注册</string>
+    <string name="activity_register_register">注册</string>
+    <string name="activity_register_username">用户名(4~24位字母、数字、下划线)</string>
+    <string name="activity_register_password">密码(8~16位个字符)</string>
+    <string name="activity_register_password_verify">确认密码</string>
+    <string name="activity_register_phone_num">手机号</string>
+    <string name="activity_register_verify_code">验证码</string>
+    <string name="activity_register_return">返回</string>
+    <!--registerActivity -->
+
+    <!-- permission check-->
+    <string name="float_window_not_allow">悬浮窗权限未开启 请在应用-权限中打开悬浮窗权限</string>
+
+    <string name="dialog_input_text_hint">开启弹幕互动吧</string>
+
+    <string name="dialog_selectSex">请选择</string>
+    <!-- live fragment-->
+    <string name="live_unknown">不显示地理位置</string>
+    <string name="live_titile">最新直播</string>
+    <string name="video_list_empty">没有视频</string>
+
+    <!-- publish activity-->
+    <string name="activity_publish_beauty">美颜效果</string>
+    <string name="activity_publish_white">美白效果</string>
+
+    <!-- live play -->
+    <string name="send">发送</string>
+    <string name="invite_dialog_tips">主播邀请您与他进行互动直播</string>
+    <string name="live_end_ask_tips">确定结束直播?</string>
+    <string name="live_end_tips">直播结束啦!</string>
+    <string name="live_time_tips">直播时长</string>
+    <string name="live_members_tips">观看人数</string>
+    <string name="live_admires_tips">获赞数量</string>
+
+    <string name="live_report_tips">请选择您的举报原因</string>
+    <string name="live_report_dirty">垃圾营销</string>
+    <string name="live_report_false">不实信息</string>
+    <string name="live_report_virus">有害信息</string>
+    <string name="live_report_illegal">违法信息</string>
+    <string name="live_report_yellow">淫秽信息</string>
+
+    <string name="live_host_leave">主播可能暂时离开</string>
+
+    <string name="live_btn_par">par</string>
+    <string name="live_btn_record">录制</string>
+    <string name="live_btn_push">开启推流</string>
+    <string name="live_btn_stop_push">关闭推流</string>
+    <string name="live_btn_stop_record">停录</string>
+
+    <!-- pushstream -->
+    <string name="clip_title">点击地址复制到黏贴版</string>
+    <string name="clip_tip">地址复制到黏贴版上了</string>
+
+    <string name="private_mode_off">隐私模式已关闭</string>
+    <string name="private_mode_on">隐私模式已开启</string>
+
+    <!-- msgadapter -->
+    <item name="tag_first" type="id"></item>
+    <item name="tag_second" type="id"></item>
+
+
+    <!-- userinfo fragment-->
+    <string name="userinfo_title">编辑个人信息</string>
+    <string name="userinfo_head">头像</string>
+    <string name="userinfo_nickname">昵称</string>
+    <string name="userinfo_sex">性别</string>
+    <string name="userinfo_cover">直播封面</string>string>
+    <string name="userinfo_sign">签名</string>
+
+    <string name="userinfo_sex_female">女</string>
+    <string name="userinfo_sex_male">男</string>
+
+    <string name="app_about">关于</string>
+    <string name="app_set">编辑个人信息</string>
+    <string name="btn_login_out">退出登录</string>
+    <string name="tip_force_offline">您的帐号已在其它地方登录</string>
+
+    <!-- set -->
+    <string name="set_live_animator">渐隐动画</string>
+    <string name="set_log_level">日志等级</string>
+    <string name="set_sdk_version">SDK版本</string>
+
+    <!-- icon_edit -->
+    <string name="edit_error">修改失败</string>
+
+
+    <!-- fragment publish -->
+    <string name="publish_already_launch_avRoom">wait!</string>
+    <string name="publish_photo_take">拍照</string>
+    <string name="publish_photo_album">相册</string>
+    <string name="publish_need_photo_tips">从未发起过图片，请选择一张作为直播封面</string>
+    <string name="publish_wait_uploading">请等待封面上传完成</string>
+    <string name="publish_upload_success">上传封面成功</string>
+    <string name="publish_photo_make_sure_tips">请添加一张照片</string>
+    <string name="publish_photo_make_sure_title">请输入图片标题</string>
+    <string name="publish_create_room_failed">创建房间失败</string>
+    <string name="publish_upload_cover_failed">上传封面失败</string>
+    <string name="publish_photo_success">发布图片成功</string>
+    <string name="text_continue">继续</string>
+    <string name="text_publish">开始直播</string>
+    <string name="text_live_preview">发布直播</string>
+    <string name="text_photo_preview">发布照片</string>
+    <string name="text_live_title_input">请输入直播标题</string>
+    <string name="text_photo_title_input">你的照片你做主</string>
+    <string name="text_live_open_lbs">开启位置</string>
+    <string name="text_live_close_lbs">不显示地理位置</string>
+    <string name="text_live_record_scr">启动录屏</string>
+    <string name="text_live_not_record_scr">不启动录屏</string>
+    <string name="text_live_location">正在定位中</string>
+    <string name="text_live_lbs_fail">定位失败</string>
+    <string name="text_live_lbs_unknown">不显示地理位置</string>
+    <string name="text_live_default_title">我的直播我做主</string>
+    <string name="text_start_push">开启推流</string>
+    <string name="text_start_screen_record">启动录屏</string>
+    <string name="text_record_info">开始录制后直播视频自动录制，并可以进行回放</string>
+    <string name="text_live_all_see">所有人可看</string>
+    <string name="text_live_share">同步到</string>
+    <string name="text_live">正在直播>></string>
+    <string name="text_live_add_title_tips">给你的直播设置一个满意的封面</string>
+    <string name="text_live_admire_limit">点赞过于频繁</string>
+    <string name="tip_no_permission">权限不足</string>
+
+    <string name="host_sign">我的签名就是把我的世界直播给你们</string>
+    <string name="host_phone">iPhone6S Plus</string>
+    <string name="host_funs">粉丝数:9090</string>
+    <string name="host_follow">关注:7089</string>
+    <string name="host_admire">赞:11.3w</string>
+
+
+    <string name="ping_ing">测速中</string>
+    <string name="ping_progress">测速进度</string>
+    <string name="ping_speed_test">网络测速</string>
+    <string name="ping_start">开始测速</string>
+    <string name="ping_no_server">获取测速列表失败，请稍后重试</string>
+    <string name="ping_time">平均时延</string>
+    <string name="ping_miss">丢包率</string>
+    <string name="ping_TEL">电信</string>
+    <string name="ping_CMCC">移动</string>
+    <string name="ping_CNC">联通</string>
+    <string name="ping_SH">上海</string>
+    <string name="ping_SZ">深圳</string>
+    <string name="ping_CD">成都</string>
+    <string name="ping_TJ">天津</string>
+    <string name="ping_NJ">南京</string>
+    <string name="ping_HZ">杭州</string>
+    <string name="ping_GZ">广州</string>
+
+    <string name="umeng_check_sign">检查签名</string>
+    <string name="umeng_check_sina">检查新浪</string>
+    <string name="umeng_check_wx">检查微信</string>
+    <string name="umeng_check_qq">检查qq</string>
+
+    <string-array name="frame_size_values">
+        <item>640 x 480</item>
+        <item>1024 x 768</item>
+        <item>1280 x 720</item>
+    </string-array>
+
+    <string-array name="video_bit_rate_values">
+        <item>5000</item>
+        <item>4000</item>
+        <item>3000</item>
+        <item>2000</item>
+        <item>1000</item>
+    </string-array>
+
+    <string name="video_decoding">视频正在解码中，请稍等...</string>
+    <string name="video_generating">视频生成中...</string>
+    <string name="video_edit">编辑视频</string>
+    <string name="video_join">拼接视频</string>
+    <string name="video_drag_sort">视频顺序</string>
+    <string name="video_join_preview">片段合成预览</string>
+    <string name="video_preview">视频预览</string>
+    <string name="video_only_save">仅保存</string>
+    <string name="video_save_and_publish">保存并发布</string>
+    <string name="video_edit_segment">设置想要截取的片段</string>
+    <string name="delete">删除</string>
+    <string name="music_empty">空空如也</string>
+    <string name="music_loading">正在加载本地音乐...</string>
+    <string name="follow_shot">合拍</string>
+
+    <!-- TCVideoRecordActivity -->
+    <string name="next_step">下一步</string>
+
+    <string name="speed_very_slow">极慢</string>
+    <string name="speed_slow">慢速</string>
+    <string name="speed_normal">标准</string>
+    <string name="speed_fast">快速</string>
+    <string name="speed_very_fast">极快</string>
+    <string name="aspect">屏比</string>
+    <string name="beauty">美颜</string>
+    <string name="music">音乐</string>
+    <string name="motion">滤镜</string>
+    <string name="speed">速度</string>
+    <string name="filter">色调</string>
+    <string name="paster">贴纸</string>
+    <string name="subtitle">字幕</string>
+
+    <string name="cancel_record">取消拍摄</string>
+    <string name="confirm_cancel_edit_content">确认放弃当前编辑的内容？</string>
+    <string name="confirm_cancel_record_content">确认放弃当前拍摄的内容？</string>
+    <string name="wrong_click">点错了</string>
+    <string name="give_up">放弃</string>
+
+    <!--ShortVideoDialog.java-->
+    <string name="video_record_title">拍摄</string>
+    <string name="video_editer_title">编辑</string>
+    <string name="picture_editer_title">图片</string>
+    <string name="chorus_title">合唱</string>
+
+    TCPictureChooseActivityvity-->
+    <string name="video_choose_error">必须选择两个以上视频文件</string>
+    <string name="video_choose">选择视频</string>
+    <string name="picture_choose">选择图片</string>
+    <string name="video_long_drag">长按拖拽可调整视频顺序</string>
+
+    <string name="video_editer_set_speed">设置慢速片段</string>
+    <string name="video_editer_bubble">气泡字幕</string>
+    <string name="video_pre_process">视频预处理</string>
+
+    <!-- TCVideoEditerPreviewActivity -->
+    <string name="save_local">保存本地</string>
+    <string name="publish">发布</string>
+    <string name="background_music">背景音乐</string>
+    <string name="background_music2">背景音</string>
+    <string name="special_effects">特效</string>
+
+    <string name="video_repeate_segment">设置重复的片段</string>
+    <string name="video_reverse">开启视频倒放</string>
+
+    <string name="select_bgm">选择背景音乐</string>
+    <string name="mic_volume">录音音量</string>
+    <string name="bgm_volume">背景音乐音量</string>
+    <string name="replace">更换</string>
+    <string name="tips">提示</string>
+    <string name="delete_bgm_or_not">确定清除已添加的背景音乐？</string>
+    <string name="confirm_delete">确定清除</string>
+
+    <string name="bgm_start_position">当前从%1$s开始</string>
+
+    <string name="no_content">暂无内容哦~</string>
+    <string name="none">无</string>
+
+    <string name="reverse">倒放</string>
+    <string name="slow_motion">慢动作</string>
+    <string name="repeate">反复</string>
+    <string name="add">新增</string>
+
+    <string name="motion1">特效一</string>
+    <string name="motion2">特效二</string>
+    <string name="motion3">特效三</string>
+    <string name="motion4">特效四</string>
+    <string name="motion5">特效五</string>
+    <string name="motion6">特效六</string>
+    <string name="motion7">特效七</string>
+    <string name="motion8">特效八</string>
+    <string name="motion9">特效九</string>
+    <string name="motion10">特效十</string>
+    <string name="motion11">特效十一</string>
+
+    <!--TCVideoPublishActivity-->
+    <string name="cancel_publish_title">取消上传</string>
+    <string name="cancel_publish_msg">视频即将上传完成，真的要取消上传吗？</string>
+
+    <!--TCVideoEffectActivityvity-->
+    <string name="motion_effect_tip">选择时间位置，按住增加特效</string>
+    <string name="static_filter_tip">选择色调效果</string>
+    <string name="revert">撤销</string>
+    <string name="paster_tips">拖动选择贴纸出现的时间</string>
+    <string name="word_tips">拖动选择字幕出现的时间</string>
+    <string name="complete">完成</string>
+    <string name="state_play">播放</string>
+    <string name="state_pause">暂停</string>
+    <string name="save_success">保存完成</string>
+    <string name="download">下载</string>
+    <string name="downloaded">已下载</string>
+    <string name="use">使用</string>
+    <string name="downloading">下载中</string>
+    <string name="dynamic_paster">动态贴纸</string>
+    <string name="static_paster">静态贴纸</string>
+    <string name="bublle_style">气泡样式</string>
+    <string name="text_color">文字颜色</string>
+    <string name="video_joining">视频拼接中...</string>
+    <string name="cancel_joining">取消拼接视频</string>
+
+    <!--鉴黄状态-->
+    <string name="review_status_normal">正常</string>
+    <string name="review_status_porn">涉黄</string>
+    <string name="review_status_not_review">审核中</string>
+
+    <!--TCVideoPublishActivity-->
+    <string name="wait_publishing">正在上传请稍等</string>
+    <string name="publish_success">发布成功</string>
+    <!--关于-->
+    <string name="about_tip1">小视频是有腾讯视频云团队提供的一款原型级别的 APP，致力于以 DEMO 的形式向您展示腾讯视频云在短视频领域的各项能力。比如如何利用视频云 SDK 进行短视频的分段录制和编辑，如何利用对象存储（COS）服务实现视频上传和发布，如何使用点播（VOD）服务实现视频的分发。</string>
+    <string name="about_tip2">小视频是开源项目的，您可以在移动直播官网的 小视频源码集（https://cloud.tencent.com/document/product/454/6991） 下载全套源代码，并参考 如何快速完成搭建（https://cloud.tencent.com/document/product/454/7999） 来快速构建您自己的服务后台。</string>
+    <string name="version">APP:v1.0</string>
+    <string name="sdk_version">RTMP SDK:v2.1.0</string>
+    <string name="im_sdk_version">IM SDK:v2.4.1.8310.8319</string>
+</resources>

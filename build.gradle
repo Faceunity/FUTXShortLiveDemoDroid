@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
+}
+
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'src/main/jniLibs'
+        }
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    compileSdkVersion = 25
+    buildToolsVersion = "23.0.3"
+    minSdkVersion = 15
+    targetSdkVersion = 23
+    versionCode = 1
+    versionName = "v1.0"
+    proguard = true
+    rootPrj = "$projectDir/.."
+    ndkAbi = 'armeabi-v7a'//,'armeabi', 'armeabi-v7a', 'arm64-v8a'
+    noffmpeg = false
+    noijkplay = false
+}

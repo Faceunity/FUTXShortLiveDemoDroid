@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0d0d0d"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/editer_rl_video_progress"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:background="@color/editer_bottom">
+
+        <com.tencent.qcloud.xiaoshipin.videoeditor.common.widget.videotimeline.VideoProgressView
+            android:id="@+id/editer_video_progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginTop="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_player_slider" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_control"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/editer_rl_video_progress"
+        android:background="@color/editer_bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:id="@+id/tv_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="00：00"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/ic_play_normal" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/editer_fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentBottom="true" />
+
+    <FrameLayout
+        android:id="@+id/editer_layout_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout_control"
+        android:layout_weight="1"
+        android:background="@color/black">
+
+        <FrameLayout
+            android:id="@+id/editer_fl_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.tencent.qcloud.xiaoshipin.videoeditor.common.widget.layer.TCLayerViewGroup
+            android:id="@+id/paster_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <com.tencent.qcloud.xiaoshipin.videoeditor.common.widget.layer.TCLayerViewGroup
+            android:id="@+id/bubble_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_back"
+        android:layout_width="match_parent"
+        android:layout_height="41dp">
+
+        <ImageView
+            android:id="@+id/editer_back_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:src="@drawable/btn_back_no_shaddow" />
+
+        <Button
+            android:id="@+id/editer_tv_done"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/drawable_ugc_next"
+            android:text="@string/complete"
+            android:textColor="@color/white"
+            android:textSize="@dimen/h5" />
+
+    </FrameLayout>
+
+    <com.tencent.qcloud.xiaoshipin.videoeditor.paster.view.TCPasterSelectView
+        android:id="@+id/tcpaster_select_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+    <com.tencent.qcloud.xiaoshipin.videoeditor.bubble.ui.popwin.TCBubbleSettingView
+        android:id="@+id/word_bubble_setting_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+</RelativeLayout>
