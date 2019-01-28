@@ -1,6 +1,6 @@
 # FUTXShortLiveDemoDroid 快速接入文档
 
-FUTXShortLiveDemoDroid 是集成了 Faceunity 面部跟踪和虚拟道具功能 和 腾讯短视频 的 Demo。
+FUTXShortLiveDemoDroid 是集成了 Faceunity 面部跟踪和虚拟道具功能 和 **[腾讯短视频](https://cloud.tencent.com/document/product/584/9366)** 的 Demo。
 
 本文是 FaceUnity SDK 快速对腾讯短视频的导读说明，关于 `FaceUnity SDK` 的详细说明，请参看 **[FULiveDemoDroid](https://github.com/Faceunity/FULiveDemoDroid/tree/dev)**
 

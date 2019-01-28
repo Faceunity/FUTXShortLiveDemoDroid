@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.faceunity.beautycontrolview.BeautyControlView;
+import com.faceunity.beautycontrolview.FURenderer;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.qcloud.xiaoshipin.R;
 import com.tencent.qcloud.xiaoshipin.common.utils.FileUtils;
@@ -53,7 +55,7 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         PasterAdapter.OnItemClickListener,
         TCPasterSelectView.OnTabChangedListener,
         TCPasterSelectView.OnAddClickListener,
-        View.OnClickListener{
+        View.OnClickListener {
     private final String TAG = "TCPasterFragment";
 
     private final int MSG_COPY_PASTER_FILES = 1;
@@ -67,15 +69,15 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
     private TXVideoEditer mTXVideoEditer;
 
     private TextView mTvPlay;
-    private RecyclerView mRvPaster;
-    private ImageView mIvDel;
-    private View mFootView;
-    private AddPasterAdapter mAddPasterAdapter;
-    private List<TCPasterInfo> mAddPasterInfoList;
+//    private RecyclerView mRvPaster;
+//    private ImageView mIvDel;
+//    private View mFootView;
+//    private AddPasterAdapter mAddPasterAdapter;
+//    private List<TCPasterInfo> mAddPasterInfoList;
 
     private TCPasterSelectView mTCPasterSelectView; // 选择贴纸控件
     private TCLayerViewGroup mTCLayerViewGroup; // 图层父布局，承载贴纸
-    private int mCurrentSelectedPos = -1;// 当前被选中的贴纸控件
+//    private int mCurrentSelectedPos = -1;// 当前被选中的贴纸控件
 
     private RangeSliderViewContainer.OnDurationChangeListener mOnDurationChangeListener;
 
@@ -87,6 +89,12 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
     private List<TCPasterInfo> mAnimatedPasterInfoList;
 
     private boolean mIsUpdatePng = false;
+
+    //================================== 美颜贴纸 ==============================
+    private FURenderer mFURenderer;
+    private BeautyControlView mBeautyControlView;
+    private boolean isInit = false;//是否初始化
+    private boolean isUserFilter = false;//是否使用美颜
 
     //================================== 时间 ==============================
     private long mDuration;
@@ -114,15 +122,35 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         mWorkHandler.sendEmptyMessage(MSG_COPY_PASTER_FILES);
 
         recoverFromManager();
+        Log.d("activity", "onViewCreated");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("activity", "onResume");
+        isUserFilter = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isUserFilter = false;
+        Log.d("activity", "onPause");
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(hidden){
+        if (hidden) {
             mTCLayerViewGroup.setVisibility(View.GONE);
             ((TCVideoEffectActivity) getActivity()).mVideoProgressController.showAllRangeSliderView(ViewConst.VIEW_TYPE_PASTER, false);
-        }else{
+        } else {
             ((TCVideoEffectActivity) getActivity()).mVideoProgressController.showAllRangeSliderView(ViewConst.VIEW_TYPE_PASTER, true);
         }
     }
@@ -143,14 +171,14 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
     }
 
     private void initView(View view) {
-        mFootView = LayoutInflater.from(view.getContext()).inflate(R.layout.item_add, null);
-        mAddPasterInfoList = new ArrayList<>();
-        mRvPaster = (RecyclerView) view.findViewById(R.id.paster_rv_list);
-        mRvPaster.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        mAddPasterAdapter = new AddPasterAdapter(mAddPasterInfoList);
-        mAddPasterAdapter.setOnItemClickListener(this);
-        mRvPaster.setAdapter(mAddPasterAdapter);
-        mAddPasterAdapter.setFooterView(mFootView);
+//        mFootView = LayoutInflater.from(view.getContext()).inflate(R.layout.item_add, null);
+//        mAddPasterInfoList = new ArrayList<>();
+//        mRvPaster = (RecyclerView) view.findViewById(R.id.paster_rv_list);
+//        mRvPaster.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+//        mAddPasterAdapter = new AddPasterAdapter(mAddPasterInfoList);
+//        mAddPasterAdapter.setOnItemClickListener(this);
+//        mRvPaster.setAdapter(mAddPasterAdapter);
+//        mAddPasterAdapter.setFooterView(mFootView);
 
         mTCPasterSelectView = (TCPasterSelectView) getActivity().findViewById(R.id.tcpaster_select_view);
         mTCPasterSelectView.setOnTabChangedListener(this);
@@ -163,8 +191,15 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         mTCLayerViewGroup.enableChildSingleClick(false); // 在容器里不响应子控件的单击事件
         mTCLayerViewGroup.enableDoubleChildClick(false); // 在容器里不响应子控件的双击事件
 
-        mIvDel = (ImageView) view.findViewById(R.id.iv_del);
-        mIvDel.setOnClickListener(this);
+//        mIvDel = (ImageView) view.findViewById(R.id.iv_del);
+//        mIvDel.setOnClickListener(this);
+
+        mFURenderer = new FURenderer.Builder(getActivity())
+                .inputTextureType(0)
+                .setNeedFaceBeauty(true)
+                .build();
+        mBeautyControlView = (BeautyControlView) view.findViewById(R.id.beauty_control);
+        mBeautyControlView.setOnFaceUnityControlListener(mFURenderer);
     }
 
     private void initData() {
@@ -174,6 +209,26 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         mTXVideoEditer = TCVideoEditerWrapper.getInstance().getEditer();
         mDuration = TCVideoEditerWrapper.getInstance().getTXVideoInfo().duration;
         updateDefaultTime();
+
+        mTXVideoEditer.setCustomVideoProcessListener(new TXVideoEditer.TXVideoCustomProcessListener() {
+            @Override
+            public int onTextureCustomProcess(int textureId, int width, int height, long timestamp) {
+                Log.d(TAG, "onTextureCustomProcess:textureId=" + textureId);
+                if (!isUserFilter) {
+                    return textureId;
+                }
+                if (!isInit) {
+                    mFURenderer.onSurfaceCreated();
+                    isInit = true;
+                }
+                return mFURenderer.onDrawFrame(textureId, width, height);
+            }
+
+            @Override
+            public void onTextureDestroyed() {
+                Log.d(TAG, "onTextureDestroyed");
+            }
+        });
     }
 
     /**
@@ -219,33 +274,33 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
     // mAddPasterAdapter底部的已添加的贴纸列表选中
     @Override
     public void onItemClick(View view, int position) {
-        if(position == mAddPasterInfoList.size()){
-            // 新增
-            clickBtnAdd();
-        }else{
-            if( !mTCLayerViewGroup.isShown() ){
-                mTCLayerViewGroup.setVisibility(View.VISIBLE);
-                // 暂停播放
-                ((TCVideoEffectActivity) getActivity()).pausePlay();
-                mTXVideoEditer.refreshOneFrame();
-            }
-            // 列表选中
-            mAddPasterAdapter.setCurrentSelectedPos(position);
-            // 预览界面选中
-            mTCLayerViewGroup.selectOperationView(position);
-            // 进度条范围选中
-            RangeSliderViewContainer lastSlider = ((TCVideoEffectActivity) getActivity()).mVideoProgressController.getRangeSliderView(ViewConst.VIEW_TYPE_PASTER, mCurrentSelectedPos);
-            if (lastSlider != null) {
-                lastSlider.setEditComplete();
-            }
-
-            RangeSliderViewContainer currentSlider = ((TCVideoEffectActivity) getActivity()).mVideoProgressController.getRangeSliderView(ViewConst.VIEW_TYPE_PASTER, position);
-            if (currentSlider != null) {
-                currentSlider.showEdit();
-            }
-
-            mCurrentSelectedPos = position;
-        }
+//        if(position == mAddPasterInfoList.size()){
+//            // 新增
+//            clickBtnAdd();
+//        }else{
+//            if( !mTCLayerViewGroup.isShown() ){
+//                mTCLayerViewGroup.setVisibility(View.VISIBLE);
+//                // 暂停播放
+//                ((TCVideoEffectActivity) getActivity()).pausePlay();
+//                mTXVideoEditer.refreshOneFrame();
+//            }
+//            // 列表选中
+//            mAddPasterAdapter.setCurrentSelectedPos(position);
+//            // 预览界面选中
+//            mTCLayerViewGroup.selectOperationView(position);
+//            // 进度条范围选中
+//            RangeSliderViewContainer lastSlider = ((TCVideoEffectActivity) getActivity()).mVideoProgressController.getRangeSliderView(ViewConst.VIEW_TYPE_PASTER, mCurrentSelectedPos);
+//            if (lastSlider != null) {
+//                lastSlider.setEditComplete();
+//            }
+//
+//            RangeSliderViewContainer currentSlider = ((TCVideoEffectActivity) getActivity()).mVideoProgressController.getRangeSliderView(ViewConst.VIEW_TYPE_PASTER, position);
+//            if (currentSlider != null) {
+//                currentSlider.showEdit();
+//            }
+//
+//            mCurrentSelectedPos = position;
+//        }
     }
 
     private void clickBtnAdd() {
@@ -411,11 +466,11 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         mTCPasterSelectView.dismiss();
 
         // 更新下方的贴纸列表
-        mAddPasterInfoList.add(tcPasterInfo);
-        mAddPasterAdapter.notifyDataSetChanged();
-        mAddPasterAdapter.setCurrentSelectedPos(mAddPasterInfoList.size() - 1);
+//        mAddPasterInfoList.add(tcPasterInfo);
+//        mAddPasterAdapter.notifyDataSetChanged();
+//        mAddPasterAdapter.setCurrentSelectedPos(mAddPasterInfoList.size() - 1);
 
-        mCurrentSelectedPos = mAddPasterInfoList.size() - 1;
+//        mCurrentSelectedPos = mAddPasterInfoList.size() - 1;
 
         addPasterListVideo();
         saveIntoManager();
@@ -453,11 +508,12 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         addPasterListVideo();
         saveIntoManager();
     }
+
     /****** 可编辑控件的回调end ******/
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
 //            case R.id.tv_paster_play:
 //                int playState = ((TCVideoEffectActivity) getActivity()).getmCurrentState();
 //                TXCLog.i(TAG, "playState = " + playState);
@@ -472,15 +528,15 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
 //                ((TCVideoEffectActivity) getActivity()).switchPlayVideo();
 //                break;
 
-            case R.id.iv_del:
-                deletePaster();
-                break;
+//            case R.id.iv_del:
+//                deletePaster();
+//                break;
         }
     }
 
     private void deletePaster() {
         int index = mTCLayerViewGroup.getSelectedViewIndex();
-        if(index < 0){
+        if (index < 0) {
             return;
         }
         PasterOperationView view = (PasterOperationView) mTCLayerViewGroup.getSelectedLayerOperationView();
@@ -489,14 +545,14 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
         }
         ((TCVideoEffectActivity) getActivity()).mVideoProgressController.removeRangeSliderView(ViewConst.VIEW_TYPE_PASTER, index);
 
-        if(mAddPasterInfoList.size() > 0){
-            mAddPasterInfoList.remove(index);
-        }
+//        if(mAddPasterInfoList.size() > 0){
+//            mAddPasterInfoList.remove(index);
+//        }
 
-        mAddPasterAdapter.notifyDataSetChanged();
+//        mAddPasterAdapter.notifyDataSetChanged();
 
-        mCurrentSelectedPos = -1;
-        mAddPasterAdapter.setCurrentSelectedPos(mCurrentSelectedPos);
+//        mCurrentSelectedPos = -1;
+//        mAddPasterAdapter.setCurrentSelectedPos(mCurrentSelectedPos);
 
         addPasterListVideo();
         saveIntoManager();
@@ -504,6 +560,7 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
 
     /**
      * 从指定路径加载贴纸配置
+     *
      * @param pathFolder
      * @return
      */
@@ -670,30 +727,30 @@ public class TCPasterFragment extends BaseEditFragment implements BaseRecyclerAd
             tcPasterInfo.setName(info.getName());
             tcPasterInfo.setIconPath(info.getIconPath());
             tcPasterInfo.setPasterType(info.getViewType());
-            mAddPasterInfoList.add(tcPasterInfo);
+//            mAddPasterInfoList.add(tcPasterInfo);
         }
-        mCurrentSelectedPos = manager.getSize() - 1;
-
-        mAddPasterAdapter.notifyDataSetChanged();
+//        mCurrentSelectedPos = manager.getSize() - 1;
+//
+//        mAddPasterAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void notifyStartPlay() {
-        if(mTCLayerViewGroup != null){
+        if (mTCLayerViewGroup != null) {
             mTCLayerViewGroup.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void notifyPausePlay() {
-        if(mTCLayerViewGroup != null){
+        if (mTCLayerViewGroup != null) {
             mTCLayerViewGroup.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void notifyResumePlay() {
-        if(mTCLayerViewGroup != null){
+        if (mTCLayerViewGroup != null) {
             mTCLayerViewGroup.setVisibility(View.GONE);
         }
     }

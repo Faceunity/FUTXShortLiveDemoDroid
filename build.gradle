@@ -1,9 +1,10 @@
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.1.4'
     }
 }
 
@@ -12,7 +13,9 @@ allprojects {
         flatDir {
             dirs 'src/main/jniLibs'
         }
+        google()
         jcenter()
+
     }
 }
 
@@ -22,7 +25,7 @@ task clean(type: Delete) {
 
 ext {
     compileSdkVersion = 25
-    buildToolsVersion = "23.0.3"
+    buildToolsVersion = "27.0.3"
     minSdkVersion = 15
     targetSdkVersion = 23
     versionCode = 1
