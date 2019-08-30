@@ -19,9 +19,9 @@ public enum FilterEnum {
     warm("warm", R.drawable.warm, "warm", Filter.FILTER_TYPE_FILTER),
 
     ziran("ziran", R.drawable.origin, "自然", Filter.FILTER_TYPE_BEAUTY_FILTER),
-    danya("danya", R.drawable.qingxin_fu, "淡雅", Filter.FILTER_TYPE_BEAUTY_FILTER),
+    danya("danya", R.drawable.qingxin, "淡雅", Filter.FILTER_TYPE_BEAUTY_FILTER),
     fennen("fennen", R.drawable.shaonv, "粉嫩", Filter.FILTER_TYPE_BEAUTY_FILTER),
-    qingxin("qingxin_fu", R.drawable.ziran, "清新", Filter.FILTER_TYPE_BEAUTY_FILTER),
+    qingxin("qingxin", R.drawable.ziran, "清新", Filter.FILTER_TYPE_BEAUTY_FILTER),
     hongrun("hongrun", R.drawable.hongrun, "红润", Filter.FILTER_TYPE_BEAUTY_FILTER);
 
     private String filterName;

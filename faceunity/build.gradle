@@ -1,17 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion = rootProject.ext.compileSdkVersion
-    buildToolsVersion = rootProject.ext.buildToolsVersion
+    compileSdkVersion 25
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "6.0.0_dev_tf_phy-3938b3e9-16d49df-47a70ba"
     }
 
     buildTypes {
@@ -28,9 +25,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile 'de.hdodenhof:circleimageview:2.2.0'
-    //    compile 'com.faceunity:nama:5.0.0'
-    implementation files('libs/nama.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:recyclerview-v7:25.4.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#efeff4"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#efeff4"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/layout_title"
@@ -13,14 +13,33 @@
         android:background="@color/colorBackground"
         android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/btn_back"
+        <LinearLayout
+            android:id="@+id/back_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:background="@drawable/btn_return" />
+            android:layout_marginLeft="14dp">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:src="@drawable/btn_back_gray"/>
+
+            <TextView
+                android:id="@+id/back_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:gravity="center_vertical"
+                android:text="返回"
+                android:textColor="#000000"
+                android:textSize="14dp"/>
+        </LinearLayout>
 
 
         <TextView
@@ -30,7 +49,7 @@
             android:layout_centerInParent="true"
             android:text="分享"
             android:textColor="@color/black"
-            android:textSize="@dimen/h10" />
+            android:textSize="@dimen/h10"/>
 
         <TextView
             android:id="@+id/btn_publish"
@@ -41,7 +60,7 @@
             android:layout_marginRight="12dp"
             android:text="发布"
             android:textColor="#0accac"
-            android:textSize="@dimen/h8" />
+            android:textSize="@dimen/h8"/>
 
     </RelativeLayout>
 
@@ -53,36 +72,25 @@
 
         <TextView
             style="@style/video_publish_prompt_text"
-            android:text="发布到小视频" />
+            android:text="发布到小视频"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#d8d8d8" />
+            android:background="#d8d8d8"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="@color/white">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp">
-
-                <com.tencent.qcloud.xiaoshipin.common.widget.videoview.TCVideoView
-                    android:id="@+id/video_view"
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:background="@color/transparent"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/bg_iv"
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:scaleType="centerCrop" />
-            </FrameLayout>
+            <com.tencent.liteav.demo.common.activity.videopreview.TCVideoView
+                android:id="@+id/video_view"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
+                android:layout_margin="15dp"
+                android:background="@color/transparent"
+                android:visibility="visible"/>
 
             <EditText
                 android:id="@+id/edit_text"
@@ -97,22 +105,22 @@
                 android:hint="说点什么…"
                 android:maxLength="500"
                 android:textColorHint="#999"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#d8d8d8" />
+            android:background="#d8d8d8"/>
 
         <TextView
             style="@style/video_publish_prompt_text"
-            android:text="同时分享到" />
+            android:text="同时分享到"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#d8d8d8" />
+            android:background="#d8d8d8"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,11 +135,11 @@
                 <CheckBox
                     android:id="@+id/vpcb_share_wx"
                     style="@style/video_publish_share_checkbox"
-                    android:button="@drawable/vp_share_wx" />
+                    android:button="@drawable/vp_share_wx"/>
 
                 <TextView
                     style="@style/video_publish_share_text"
-                    android:text="微信" />
+                    android:text="微信"/>
 
             </LinearLayout>
 
@@ -141,11 +149,11 @@
                 <CheckBox
                     android:id="@+id/vpcb_share_circle"
                     style="@style/video_publish_share_checkbox"
-                    android:button="@drawable/vp_share_circle" />
+                    android:button="@drawable/vp_share_circle"/>
 
                 <TextView
                     style="@style/video_publish_share_text"
-                    android:text="朋友圈" />
+                    android:text="朋友圈"/>
 
             </LinearLayout>
 
@@ -155,11 +163,11 @@
                 <CheckBox
                     android:id="@+id/vpcb_share_qq"
                     style="@style/video_publish_share_checkbox"
-                    android:button="@drawable/vp_share_qq" />
+                    android:button="@drawable/vp_share_qq"/>
 
                 <TextView
                     style="@style/video_publish_share_text"
-                    android:text="QQ" />
+                    android:text="QQ"/>
 
             </LinearLayout>
 
@@ -168,11 +176,11 @@
                 <CheckBox
                     android:id="@+id/vpcb_share_qzone"
                     style="@style/video_publish_share_checkbox"
-                    android:button="@drawable/vp_share_qzone" />
+                    android:button="@drawable/vp_share_qzone"/>
 
                 <TextView
                     style="@style/video_publish_share_text"
-                    android:text="QQ空间" />
+                    android:text="QQ空间"/>
 
             </LinearLayout>
 
@@ -182,11 +190,11 @@
                 <CheckBox
                     android:id="@+id/vpcb_share_wb"
                     style="@style/video_publish_share_checkbox"
-                    android:button="@drawable/vp_share_wb" />
+                    android:button="@drawable/vp_share_wb"/>
 
                 <TextView
                     style="@style/video_publish_share_text"
-                    android:text="微博" />
+                    android:text="微博"/>
 
             </LinearLayout>
 
@@ -206,7 +214,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp" />
+            android:layout_marginTop="100dp"
+            android:src="@drawable/publish_0"/>
 
         <TextView
             android:id="@+id/publish_text"
@@ -217,7 +226,7 @@
             android:layout_marginTop="25dp"
             android:text="正在上传请稍等"
             android:textColor="#0accac"
-            android:textSize="24sp" />
+            android:textSize="24sp"/>
 
     </RelativeLayout>
 

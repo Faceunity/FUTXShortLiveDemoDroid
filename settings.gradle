@@ -1,4 +1,10 @@
-include ':app', ':faceunity'
+include ':app', ':lib_tcsuperplayer'
+
+include ':lib_tcvideorecord'
+include ':lib_tcvideoediter'
+include ':lib_tcvideojoiner'
+include ':lib_tccommon'
+include ':faceunity'
 
 
 

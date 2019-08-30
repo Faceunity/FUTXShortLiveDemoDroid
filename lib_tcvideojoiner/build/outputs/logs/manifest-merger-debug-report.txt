@@ -1,0 +1,67 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:1-24:12
+	package
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:3:5-50
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:5:5-30
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:4:5-28
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+application
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:7:5-22:19
+activity#com.tencent.liteav.demo.videojoiner.TCVideoJoinerActivity
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:8:9-17:20
+	android:screenOrientation
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:10:13-49
+	android:name
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:9:13-50
+intent-filter#action:name:android.intent.action.MAIN+action:name:com.tencent.liteav.demo.videojoiner+category:name:android.intent.category.DEFAULT
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:11:13-16:29
+action#com.tencent.liteav.demo.videojoiner
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:12:17-78
+	android:name
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:12:25-75
+action#android.intent.action.MAIN
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:13:17-69
+	android:name
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:13:25-66
+category#android.intent.category.DEFAULT
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:15:17-76
+	android:name
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:15:27-73
+activity#com.tencent.liteav.demo.videojoiner.TCVideoJoinerPreviewActivity
+ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:18:9-21:46
+	android:screenOrientation
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:20:13-49
+	android:launchMode
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:21:13-44
+	android:name
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml:19:13-57
+uses-sdk
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		ADDED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml
+		INJECTED from D:\GitHub\FUTXShortLiveDemoDroid\lib_tcvideojoiner\src\main\AndroidManifest.xml

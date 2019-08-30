@@ -23,7 +23,7 @@
     <color name="c8">#FFFFFF</color>
     <color name="c9">#777777</color>
 
-    <color name="color_bottom_bar_background">#FD5D40</color>
+    <color name="color_bottom_bar_background">#222B48</color>
     <color name="colorPrimaryDark">#21a3f5</color>
     <color name="colorAccent">#0accac</color>
     <color name="transparent">#00000000</color>
@@ -53,8 +53,6 @@
     <color name="panel_black">#25272A</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="half_black">#7F000000</color>
-    <color name="half_white">#7FFFFFFF</color>
     <color name="btn_red">#D63F41</color>
     <color name="btn_red_hover">#E8484B</color>
     <color name="btn_blue">#0F73CB</color>
@@ -120,7 +118,6 @@
     <!--green-->
     <color name="colorGreen">#0accac</color>
 
-    <color name="colorRed2">#FF584C</color>
 
     <color name="colorSendName">#9966cc</color>
     <color name="colorSendName1">#F12B5B</color>
@@ -148,8 +145,8 @@
     <color name="edit_green">#21AE58</color>
 
     <color name="record_progress_bg">#66000000</color> <!-- 40%不透明度 -->
-    <color name="record_progress">#ff584c</color>
-    <color name="record_progress_pending">#a8002d</color>
+    <color name="record_progress">#00f5ac</color>
+    <color name="record_progress_pending">#10acc0</color>
 
     <color name="record_speed_text_normal">#ffffff</color>
     <color name="record_speed_text_select">#00f5ac</color>
@@ -166,27 +163,34 @@
     <color name="primaryDarkColor">#808e95</color>
     <color name="primaryTextColor">#000000</color>
 
-    <!--动态滤镜的颜色-->
-    <color name="spirit_out_color">#EC5F9B</color>
-    <color name="spirit_out_color_press">#B21FC0CC</color>
-
-    <color name="screen_split">#EC8435</color>
-    <color name="screen_split_press">#B2FFBB00</color>
-
-    <color name="light_wave">#1FBCB6</color>
-    <color name="light_wave_press">#B2655CE6</color>
-
-    <color name="dark_illusion">#449FF3</color>
-    <color name="dark_illusion_press">#B2006EFF</color>
-
-    <color name="editer_bottom">#1F2531</color>
     <color name="time_bg_normal">#0accac</color>
     <color name="time_bg_selected">#AA0ACCAC</color>
 
-    <color name="follow_shot_bg_normal">#ec766a</color>
-    <color name="follow_shot_bg_selected">#ec6455</color>
-
     <!-- 裁剪范围颜色 -->
-    <color name="colorAccentTransparent30">#B2FF584C</color>
-    <color name="actionsheet_gray">#8F8F8F</color>
+    <color name="colorAccentTransparent30">#4d0accac</color>
+    <color name="colorTintRed">#FF4C58</color>
+
+    <color name="biz_audio_progress_bg">#00b2ff</color>
+    <color name="biz_audio_progress_first">#ffffff</color>
+    <color name="biz_audio_progress_second">#6b6666</color>
+
+    <color name="default_bg">#aa000000</color>
+    <color name="select_color">#00b2ff</color>
+    <color name="normal_color">#ffffffff</color>
+    <color name="divider_color">#55504a</color>
+    <!--special color-->
+    <color name="black_a10_color">#1a000000</color>
+    <!--MainActivity item被选中的颜色-->
+    <color name="main_item_selected_color">#555555</color>
+    <color name="main_item_unselected_color">#2A2A2A</color>
+    <color name="main_item_divide_color">#0d0d0d</color>
+
+    <color name="super_vod_vtt_bg">#7E000000</color>
+
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorComBg">#0B1829</color>
+    <color name="colorBtn">#016EFF</color>
+    <color name="hlfTransparent">#30000000</color>
+
 </resources>

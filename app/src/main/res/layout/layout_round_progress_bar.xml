@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.tencent.qcloud.xiaoshipin.common.widget.beautysetting.RoundProgressBar
+    <com.tencent.liteav.demo.common.widget.RoundProgressBar
         android:id="@+id/progress_round"
         android:layout_width="23dp"
         android:layout_height="23dp"
