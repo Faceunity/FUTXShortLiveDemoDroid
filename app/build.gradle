@@ -27,12 +27,6 @@ android {
         javaMaxHeapSize "4g"
     }
 
-//    sourceSets {
-//        main {
-//            jniLibs.srcDirs = ['libs']
-//        }
-//    }
-//
     configurations{
         all*.exclude module: 'okhttp'
         all*.exclude module: 'okio'
@@ -52,15 +46,15 @@ dependencies {
     compile(name: 'lib_tcsuperplayer', ext: 'aar')
     //    compile 'com.facebook.fresco:fresco:0.7.0'
     //    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+//    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
     //compile(name: 'imsdk-4.2.52', ext: 'aar')
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.1.3'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.3'
     //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     //    compile 'com.android.support:design:25.+'
     //    compile 'com.android.support:cardview-v7:25.+'
