@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -41,8 +42,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.faceunity.beautycontrolview.BeautyControlView;
-import com.faceunity.beautycontrolview.FURenderer;
+import com.faceunity.nama.FURenderer;
+import com.faceunity.nama.ui.BeautyControlView;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.common.utils.FileUtils;
 import com.tencent.liteav.demo.common.utils.TCConstants;
@@ -169,10 +170,9 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     private boolean mTouchFocus = true; // 是否开启手动对焦
 
-    private FURenderer mFURender;
-    private BeautyControlView beautyControlView;
-    private boolean isInit = false;
-    private String isOpen;
+    private FURenderer mFURenderer;
+    private boolean mIsOpenFuBeauty;
+    private boolean mIsFirstFrame = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,16 +239,17 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
         mTXCameraRecord.setVideoRecordListener(this);
         mTXCameraRecord.setVideoProcessListener(new TXUGCRecord.VideoCustomProcessListener() {
+
             @Override
             public int onTextureCustomProcess(int texId, int width, int height) {
-                if (mFURender == null) {
+                if (!mIsOpenFuBeauty) {
                     return texId;
                 }
-                if (!isInit) {
-                    mFURender.loadItems();
-                    isInit = true;
+                if (mIsFirstFrame) {
+                    mFURenderer.onSurfaceCreated();
+                    mIsFirstFrame = false;
                 }
-                return mFURender.onDrawFrameSingleInputTex(texId, width, height);
+                return mFURenderer.onDrawFrameSingleInput(texId, width, height);
             }
 
             @Override
@@ -257,9 +258,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
             @Override
             public void onTextureDestroyed() {
-                if (mFURender != null) {
-                    mFURender.destroyItems();
+                if (mFURenderer != null) {
+                    mFURenderer.onSurfaceDestroyed();
                 }
+                mIsFirstFrame = true;
             }
         });
         //方式1：
@@ -454,11 +456,17 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     }
 
     private void initFURender() {
-        isOpen = PreferenceUtil.getString(this, PreferenceUtil.KEY_FACEUNITY_ISON);
-        beautyControlView = (BeautyControlView) findViewById(R.id.beauty_view);
-        if (isOpen.equals("true")) {
-            mFURender = new FURenderer.Builder(this).build();
-            beautyControlView.setOnFaceUnityControlListener(mFURender);
+        String isOpen = PreferenceUtil.getString(this, PreferenceUtil.KEY_FACEUNITY_ISON);
+        BeautyControlView beautyControlView = (BeautyControlView) findViewById(R.id.beauty_view);
+        mIsOpenFuBeauty = "true".equals(isOpen);
+        if (mIsOpenFuBeauty) {
+            FURenderer.initFURenderer(this);
+            mFURenderer = new FURenderer.Builder(this)
+                    .setInputTextureType(FURenderer.INPUT_2D_TEXTURE)
+                    .setCameraType(Camera.CameraInfo.CAMERA_FACING_FRONT)
+                    .setInputImageOrientation(FURenderer.getCameraOrientation(Camera.CameraInfo.CAMERA_FACING_FRONT))
+                    .build();
+            beautyControlView.setOnFaceUnityControlListener(mFURenderer);
             layout_beauty.setVisibility(GONE);
         } else {
             beautyControlView.setVisibility(View.GONE);
@@ -535,18 +543,18 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     @Override
     protected void onPause() {
-        if (mFURender != null) {
+        if (mFURenderer != null) {
             final CountDownLatch count = new CountDownLatch(1);
-            mFURender.queueEvent(new Runnable() {
+            mFURenderer.queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    mFURender.destroyItems();
-                    isInit = false;
+                    mFURenderer.onSurfaceDestroyed();
+                    mIsFirstFrame = true;
                     count.countDown();
                 }
             });
             try {
-                count.await(1, TimeUnit.SECONDS);
+                count.await(500, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -735,6 +743,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             if (mTXCameraRecord != null) {
                 TXCLog.i(TAG, "switchCamera = " + mFront);
                 mTXCameraRecord.switchCamera(mFront);
+            }
+            if (mFURenderer != null) {
+                int cameraType = mFront ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
+                mFURenderer.onCameraChanged(cameraType, FURenderer.getCameraOrientation(cameraType));
             }
 
         } else if (i == R.id.compose_record_btn) {
