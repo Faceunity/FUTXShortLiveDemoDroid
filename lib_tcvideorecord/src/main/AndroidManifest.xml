@@ -8,6 +8,8 @@
         <activity
             android:name=".TCVideoRecordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppCompatTheme"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <activity
             android:name=".TCVideoRecordSmartActivity"

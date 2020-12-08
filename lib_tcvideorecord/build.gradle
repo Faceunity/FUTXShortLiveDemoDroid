@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':lib_tccommon')
-    compile project(':faceunity')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':lib_tccommon')
+    implementation project(':faceunity')
 }

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -12,6 +11,10 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,7 +23,9 @@ import android.os.Environment;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -43,12 +48,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.faceunity.nama.FURenderer;
-import com.faceunity.nama.ui.BeautyControlView;
+import com.faceunity.nama.ui.FaceUnityView;
+import com.faceunity.nama.utils.CameraUtils;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.common.utils.FileUtils;
 import com.tencent.liteav.demo.common.utils.TCConstants;
 import com.tencent.liteav.demo.common.view.BeautySettingPannel;
 import com.tencent.liteav.demo.common.view.CustomProgressDialog;
+import com.tencent.liteav.demo.videorecord.profile.CSVUtils;
+import com.tencent.liteav.demo.videorecord.profile.Constant;
 import com.tencent.liteav.demo.videorecord.util.PreferenceUtil;
 import com.tencent.liteav.demo.videorecord.view.ComposeRecordBtn;
 import com.tencent.liteav.demo.videorecord.view.RecordProgressView;
@@ -75,8 +83,8 @@ import static android.view.View.GONE;
 /**
  * UGC小视频录制界面
  */
-public class TCVideoRecordActivity extends Activity implements View.OnClickListener, BeautySettingPannel.IOnBeautyParamsChangeListener
-        , TXRecordCommon.ITXVideoRecordListener, View.OnTouchListener, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
+public class TCVideoRecordActivity extends AppCompatActivity implements View.OnClickListener, BeautySettingPannel.IOnBeautyParamsChangeListener
+        , TXRecordCommon.ITXVideoRecordListener, View.OnTouchListener, GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener, SensorEventListener {
 
     private static final String TAG = "TCVideoRecordActivity";
     private static final String OUTPUT_DIR_NAME = "TXUGC";
@@ -173,6 +181,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private FURenderer mFURenderer;
     private boolean mIsOpenFuBeauty;
     private boolean mIsFirstFrame = true;
+    private SensorManager mSensorManager;
+    private TextView mTvFps;
+    private CSVUtils mCSVUtils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,6 +245,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 ", mRecommendQuality = " + mRecommendQuality + ", mRecordResolution = " + mRecordResolution + ", mBiteRate = " + mBiteRate + ", mFps = " + mFps + ", mGop = " + mGop);
     }
 
+    private long openTime = System.currentTimeMillis();
     private void startCameraPreview() {
         if (mStartPreview) return;
         mStartPreview = true;
@@ -246,10 +259,25 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                     return texId;
                 }
                 if (mIsFirstFrame) {
+                    Log.e(TAG, "onTextureCustomProcess: start");
                     mFURenderer.onSurfaceCreated();
+                    initCsvUtil(TCVideoRecordActivity.this);
+                    Log.e(TAG, "onTextureCustomProcess: end");
                     mIsFirstFrame = false;
+                    openTime = System.currentTimeMillis();
+                    return 0;
                 }
-                return mFURenderer.onDrawFrameSingleInput(texId, width, height);
+                //在三星s6中，前100ms需要这样处理，防止闪屏，原因未知
+                if (System.currentTimeMillis() - openTime < 100) {
+                   mFURenderer.onDrawFrameSingleInput(texId, width, height);
+                }
+                long start = System.nanoTime();
+                int tId = mFURenderer.onDrawFrameSingleInput(texId, width, height);
+                long time = System.nanoTime() - start;
+                if (mCSVUtils != null) {
+                    mCSVUtils.writeCsv(null, time);
+                }
+                return tId;
             }
 
             @Override
@@ -260,6 +288,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             public void onTextureDestroyed() {
                 if (mFURenderer != null) {
                     mFURenderer.onSurfaceDestroyed();
+                }
+                if (mCSVUtils != null) {
+                    mCSVUtils.close();
+                    mCSVUtils = null;
                 }
                 mIsFirstFrame = true;
             }
@@ -331,7 +363,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     }
 
     private void setRecordRotatioinListener() {
-        // 如果想保持activity为竖屏，并且要home在右横屏录制，首先把mBtnRecordRotation的点击监听代码打开，把btn_orientation控件可见，然后在manifest中把该activity设置为竖屏android:screenOrientation="portrait"
+        // 如果想保持activity为竖屏，并且要home在右横屏录制，首先把mBtnRecordRotation的点击监听代码打开，
+        // 把btn_orientation控件可见，然后在manifest中把该activity设置为竖屏android:screenOrientation="portrait"
         mBtnRecordRotation.setVisibility(View.VISIBLE);
         mBtnRecordRotation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -368,6 +401,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mMaskLayout = (FrameLayout) findViewById(R.id.mask);
         mMaskLayout.setOnTouchListener(this);
 
+        mTvFps = findViewById(R.id.tv_fps);
         mIvConfirm = (ImageView) findViewById(R.id.btn_confirm);
         mIvConfirm.setOnClickListener(this);
         mIvConfirm.setImageResource(R.drawable.ugc_confirm_disable);
@@ -457,17 +491,36 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     private void initFURender() {
         String isOpen = PreferenceUtil.getString(this, PreferenceUtil.KEY_FACEUNITY_ISON);
-        BeautyControlView beautyControlView = (BeautyControlView) findViewById(R.id.beauty_view);
+        FaceUnityView beautyControlView = findViewById(R.id.faceunity_view);
         mIsOpenFuBeauty = "true".equals(isOpen);
         if (mIsOpenFuBeauty) {
-            FURenderer.initFURenderer(this);
+            FURenderer.setup(this);
             mFURenderer = new FURenderer.Builder(this)
-                    .setInputTextureType(FURenderer.INPUT_2D_TEXTURE)
-                    .setCameraType(Camera.CameraInfo.CAMERA_FACING_FRONT)
-                    .setInputImageOrientation(FURenderer.getCameraOrientation(Camera.CameraInfo.CAMERA_FACING_FRONT))
+                    .setInputTextureType(FURenderer.INPUT_TEXTURE_2D)
+                    .setCameraFacing(Camera.CameraInfo.CAMERA_FACING_FRONT)
+                    .setRunBenchmark(true)
+                    .setOnDebugListener(new FURenderer.OnDebugListener() {
+                        @Override
+                        public void onFpsChanged(double fps, double callTime) {
+                            final String FPS = String.format(Locale.getDefault(), "%.2f", fps);
+                            Log.e(TAG, "onFpsChanged: FPS " + FPS + " callTime " + String.format(Locale.getDefault(), "%.2f", callTime));
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mTvFps != null) {
+                                        mTvFps.setText("FPS: " + FPS);
+                                    }
+                                }
+                            });
+                        }
+                    })
+                    .setInputImageOrientation(CameraUtils.getCameraOrientation(Camera.CameraInfo.CAMERA_FACING_FRONT))
                     .build();
-            beautyControlView.setOnFaceUnityControlListener(mFURenderer);
+            beautyControlView.setModuleManager(mFURenderer);
             layout_beauty.setVisibility(GONE);
+            mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+            Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
             beautyControlView.setVisibility(View.GONE);
             layout_beauty.setVisibility(View.VISIBLE);
@@ -561,7 +614,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
         super.onPause();
         TXCLog.i(TAG, "onPause");
-        mScreenOrientationListener.disable();
+//        mScreenOrientationListener.disable();
         if (mTXCameraRecord != null) {
             mTXCameraRecord.setVideoProcessListener(null); // 这里要取消监听，否则在上面的回调中又会重新开启预览
             mTXCameraRecord.stopCameraPreview();
@@ -590,7 +643,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         TXCLog.i(TAG, "onResume");
-        mScreenOrientationListener.enable();
+//        mScreenOrientationListener.enable();
         setSelectAspect();
 
         onActivityRotation();
@@ -609,6 +662,9 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (null != mSensorManager) {
+            mSensorManager.unregisterListener(this);
+        }
         TXCLog.i(TAG, "onDestroy");
     }
 
@@ -654,6 +710,24 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             mTXCameraRecord.setRenderRotation(mRenderRotation);
         }
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float x = event.values[0];
+            float y = event.values[1];
+            if (Math.abs(x) > 3 || Math.abs(y) > 3) {
+                if (Math.abs(x) > Math.abs(y)) {
+                    mFURenderer.onDeviceOrientationChanged(x > 0 ? 90 : 270);
+                } else {
+                    mFURenderer.onDeviceOrientationChanged(y > 0 ? 0 : 180);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     /**
      * 手机从home在右（左）边直接180度切换到home键在左（右）边，onConfigurationChanged是不回调的，可以用该方案解决此问题。
@@ -746,7 +820,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             }
             if (mFURenderer != null) {
                 int cameraType = mFront ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
-                mFURenderer.onCameraChanged(cameraType, FURenderer.getCameraOrientation(cameraType));
+                mFURenderer.onCameraChanged(cameraType, CameraUtils.getCameraOrientation(cameraType));
             }
 
         } else if (i == R.id.compose_record_btn) {
@@ -1743,5 +1817,20 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         back();
     }
 
+    private void initCsvUtil(Context context) {
+        mCSVUtils = new CSVUtils(context);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
+        String dateStrDir = format.format(new Date(System.currentTimeMillis()));
+        dateStrDir = dateStrDir.replaceAll("-", "").replaceAll("_", "");
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault());
+        String dateStrFile = df.format(new Date());
+        String filePath = Constant.filePath + dateStrDir + File.separator + "excel-" + dateStrFile + ".csv";
+        Log.d(TAG, "initLog: CSV file path:" + filePath);
+        StringBuilder headerInfo = new StringBuilder();
+        headerInfo.append("version：").append(FURenderer.getVersion()).append(CSVUtils.COMMA)
+                .append("机型：").append(android.os.Build.MANUFACTURER).append(android.os.Build.MODEL)
+                .append("处理方式：Texture").append(CSVUtils.COMMA);
+        mCSVUtils.initHeader(filePath, headerInfo);
+    }
 
 }
