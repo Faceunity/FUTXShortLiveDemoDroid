@@ -1,5 +1,7 @@
 package com.tencent.liteav.demo;
 
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.tencent.bugly.crashreport.CrashReport;
@@ -20,8 +22,9 @@ public class DemoApplication extends MultiDexApplication {
     private static DemoApplication instance;
 
     // 如何获取License? 请参考官网指引 https://cloud.tencent.com/document/product/454/34750
-    String licenceUrl = "";
-    String licenseKey = "";
+    String licenceUrl = "http://download-1252463788.cossh.myqcloud.com/xiaoshipin/licence_android/RDM_Enterprise.license";
+    String licenseKey = "9bc74ac7bfd07ea392e8fdff2ba5678a";
+
 
     @Override
     public void onCreate() {
@@ -77,4 +80,9 @@ public class DemoApplication extends MultiDexApplication {
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 }

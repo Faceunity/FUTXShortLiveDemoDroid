@@ -24,5 +24,5 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':lib_tccommon')
-    implementation project(':faceunity')
+    api project(':faceunity')
 }

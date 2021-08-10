@@ -10,7 +10,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -47,9 +46,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.faceunity.core.enumeration.CameraFacingEnum;
+import com.faceunity.core.enumeration.FUAIProcessorEnum;
+import com.faceunity.core.enumeration.FUInputTextureEnum;
 import com.faceunity.nama.FURenderer;
+import com.faceunity.nama.data.FaceUnityDataFactory;
+import com.faceunity.nama.listener.FURendererListener;
 import com.faceunity.nama.ui.FaceUnityView;
-import com.faceunity.nama.utils.CameraUtils;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.common.utils.FileUtils;
 import com.tencent.liteav.demo.common.utils.TCConstants;
@@ -75,8 +78,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static android.view.View.GONE;
 
@@ -179,6 +180,7 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
     private boolean mTouchFocus = true; // 是否开启手动对焦
 
     private FURenderer mFURenderer;
+    private FaceUnityDataFactory mFaceUnityDataFactory;
     private boolean mIsOpenFuBeauty;
     private boolean mIsFirstFrame = true;
     private SensorManager mSensorManager;
@@ -259,20 +261,18 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
                     return texId;
                 }
                 if (mIsFirstFrame) {
-                    Log.e(TAG, "onTextureCustomProcess: start");
-                    mFURenderer.onSurfaceCreated();
+                    mFaceUnityDataFactory.bindCurrentRenderer();
                     initCsvUtil(TCVideoRecordActivity.this);
-                    Log.e(TAG, "onTextureCustomProcess: end");
                     mIsFirstFrame = false;
                     openTime = System.currentTimeMillis();
                     return 0;
                 }
                 //在三星s6中，前100ms需要这样处理，防止闪屏，原因未知
                 if (System.currentTimeMillis() - openTime < 100) {
-                   mFURenderer.onDrawFrameSingleInput(texId, width, height);
+                    mFURenderer.onDrawFrameSingleTex(texId, width, height);
                 }
                 long start = System.nanoTime();
-                int tId = mFURenderer.onDrawFrameSingleInput(texId, width, height);
+                int tId = mFURenderer.onDrawFrameSingleTex(texId, width, height);
                 long time = System.nanoTime() - start;
                 if (mCSVUtils != null) {
                     mCSVUtils.writeCsv(null, time);
@@ -287,7 +287,7 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onTextureDestroyed() {
                 if (mFURenderer != null) {
-                    mFURenderer.onSurfaceDestroyed();
+                    mFURenderer.release();
                 }
                 if (mCSVUtils != null) {
                     mCSVUtils.close();
@@ -494,38 +494,45 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
         FaceUnityView beautyControlView = findViewById(R.id.faceunity_view);
         mIsOpenFuBeauty = "true".equals(isOpen);
         if (mIsOpenFuBeauty) {
-            FURenderer.setup(this);
-            mFURenderer = new FURenderer.Builder(this)
-                    .setInputTextureType(FURenderer.INPUT_TEXTURE_2D)
-                    .setCameraFacing(Camera.CameraInfo.CAMERA_FACING_FRONT)
-                    .setRunBenchmark(true)
-                    .setOnDebugListener(new FURenderer.OnDebugListener() {
-                        @Override
-                        public void onFpsChanged(double fps, double callTime) {
-                            final String FPS = String.format(Locale.getDefault(), "%.2f", fps);
-                            Log.e(TAG, "onFpsChanged: FPS " + FPS + " callTime " + String.format(Locale.getDefault(), "%.2f", callTime));
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mTvFps != null) {
-                                        mTvFps.setText("FPS: " + FPS);
-                                    }
-                                }
-                            });
-                        }
-                    })
-                    .setInputImageOrientation(CameraUtils.getCameraOrientation(Camera.CameraInfo.CAMERA_FACING_FRONT))
-                    .build();
-            beautyControlView.setModuleManager(mFURenderer);
+            mFURenderer = FURenderer.getInstance();
+            mFURenderer.setInputTextureType(FUInputTextureEnum.FU_ADM_FLAG_COMMON_TEXTURE);
+            mFURenderer.setCameraFacing(CameraFacingEnum.CAMERA_FRONT);
+            mFURenderer.setMarkFPSEnable(true);
+            mFaceUnityDataFactory = new FaceUnityDataFactory(0);
+            beautyControlView.bindDataFactory(mFaceUnityDataFactory);
             layout_beauty.setVisibility(GONE);
             mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            mFURenderer.bindListener(mFURendererListener);
         } else {
             beautyControlView.setVisibility(View.GONE);
             layout_beauty.setVisibility(View.VISIBLE);
         }
     }
+
+    private FURendererListener mFURendererListener = new FURendererListener() {
+
+        @Override
+        public void onTrackStatusChanged(FUAIProcessorEnum type, int status) {
+
+        }
+
+        @Override
+        public void onFpsChanged(double fps, double callTime) {
+            final String FPS = String.format(Locale.getDefault(), "%.2f", fps);
+            Log.e(TAG, "onFpsChanged: FPS " + FPS + " callTime " + String.format(Locale.getDefault(), "%.2f", callTime));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mTvFps != null) {
+                        mTvFps.setText("FPS: " + FPS);
+                    }
+                }
+            });
+        }
+
+    };
 
     private void initAudioListener() {
         mAudioCtrl.setOnItemClickListener(new RecordDef.OnItemClickListener() {
@@ -596,28 +603,12 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onPause() {
-        if (mFURenderer != null) {
-            final CountDownLatch count = new CountDownLatch(1);
-            mFURenderer.queueEvent(new Runnable() {
-                @Override
-                public void run() {
-                    mFURenderer.onSurfaceDestroyed();
-                    mIsFirstFrame = true;
-                    count.countDown();
-                }
-            });
-            try {
-                count.await(500, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         super.onPause();
         TXCLog.i(TAG, "onPause");
 //        mScreenOrientationListener.disable();
         if (mTXCameraRecord != null) {
-            mTXCameraRecord.setVideoProcessListener(null); // 这里要取消监听，否则在上面的回调中又会重新开启预览
             mTXCameraRecord.stopCameraPreview();
+            mTXCameraRecord.setVideoProcessListener(null); // 这里要取消监听，否则在上面的回调中又会重新开启预览
             mStartPreview = false;
             // 设置闪光灯的状态为关闭
             if (mIsTorchOpen) {
@@ -649,6 +640,7 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
         onActivityRotation();
 
         if (hasPermission()) {
+            mIsFirstFrame = true;
             startCameraPreview();
         }
     }
@@ -718,9 +710,9 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
             float y = event.values[1];
             if (Math.abs(x) > 3 || Math.abs(y) > 3) {
                 if (Math.abs(x) > Math.abs(y)) {
-                    mFURenderer.onDeviceOrientationChanged(x > 0 ? 90 : 270);
+                    mFURenderer.setDeviceOrientation(x > 0 ? 0 : 180);
                 } else {
-                    mFURenderer.onDeviceOrientationChanged(y > 0 ? 0 : 180);
+                    mFURenderer.setDeviceOrientation(y > 0 ? 90 : 270);
                 }
             }
         }
@@ -819,8 +811,8 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
                 mTXCameraRecord.switchCamera(mFront);
             }
             if (mFURenderer != null) {
-                int cameraType = mFront ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
-                mFURenderer.onCameraChanged(cameraType, CameraUtils.getCameraOrientation(cameraType));
+                CameraFacingEnum cameraType = mFront ? CameraFacingEnum.CAMERA_FRONT : CameraFacingEnum.CAMERA_BACK;
+                mFURenderer.setCameraFacing(cameraType);
             }
 
         } else if (i == R.id.compose_record_btn) {
@@ -1827,7 +1819,7 @@ public class TCVideoRecordActivity extends AppCompatActivity implements View.OnC
         String filePath = Constant.filePath + dateStrDir + File.separator + "excel-" + dateStrFile + ".csv";
         Log.d(TAG, "initLog: CSV file path:" + filePath);
         StringBuilder headerInfo = new StringBuilder();
-        headerInfo.append("version：").append(FURenderer.getVersion()).append(CSVUtils.COMMA)
+        headerInfo.append("version：").append(FURenderer.getInstance().getVersion()).append(CSVUtils.COMMA)
                 .append("机型：").append(android.os.Build.MANUFACTURER).append(android.os.Build.MODEL)
                 .append("处理方式：Texture").append(CSVUtils.COMMA);
         mCSVUtils.initHeader(filePath, headerInfo);
