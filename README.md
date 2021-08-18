@@ -2,7 +2,7 @@
 
 本工程是第三方 Demo 依赖的 faceunity 模块，每次升级 SDK 时会优先在这里改动，然后同步到各个第三方 Demo 中。
 
-当前的 Nama SDK 版本是 **7.2.0**。
+当前的 Nama SDK 版本是 **7.4.1.0**。
 
 --------
 
@@ -16,7 +16,34 @@
 - assets/makeup 文件夹下 \*.bundle 是美妆素材文件。
 - com/faceunity/nama/authpack.java 是鉴权证书文件，必须提供有效的证书才能运行 Demo，请联系技术支持获取。
 
-通过 Maven 依赖最新版 SDK：`implementation 'com.faceunity:nama:7.2.0'`，方便升级，推荐使用。
+通过 Maven 依赖最新版 SDK，方便升级，推荐使用。
+
+```java
+allprojects {
+    repositories {
+        ...
+        maven { url 'http://maven.faceunity.com/repository/maven-public/' }
+        ...
+  }
+}
+```
+```java
+dependencies {
+...
+implementation 'com.faceunity:core:7.4.1.0' // 实现代码
+implementation 'com.faceunity:model:7.4.1.0' // 道具以及AI bundle
+...
+}
+```
+
+```java
+dependencies {
+...
+implementation 'com.faceunity:nama:7.4.1.0' //底层库-标准版
+implementation 'com.faceunity:nama-lite:7.4.1.0' //底层库-lite版
+...
+}
+```
 
 其中，AAR 包含以下内容：
 
@@ -97,9 +124,10 @@ android {
 
 #### 2.创建
 
-调用 `FURenderer` 类的  `onSurfaceCreated` 方法在 SDK 使用前加载必要的资源。
+在 `FaceUnityDataFactory` 类 的  `bindCurrentRenderer` 方法是对 FaceUnity SDK 每次使用前数据初始化的封装。
 
-在TCVideoRecordActivity类实现VideoCustomProcessListener接口，在onTextureCustomProcess方法中第一次执行到的时候可以执行FURenderer.onSurfaceCreated(); 方法。
+在 TCVideoRecordActivity 类中 设置 VideoCustomProcessListener回调方法，且在onTextureCustomProcess方法中执行。
+
 
 ```java
 mTXCameraRecord.setVideoProcessListener(new TXUGCRecord.VideoCustomProcessListener() {
@@ -110,11 +138,13 @@ mTXCameraRecord.setVideoProcessListener(new TXUGCRecord.VideoCustomProcessListen
             return texId;
         }
         if (mIsFirstFrame) {
-            mFURenderer.onSurfaceCreated();
+            mFaceUnityDataFactory.bindCurrentRenderer();
+            initCsvUtil(TCVideoRecordActivity.this);
             mIsFirstFrame = false;
+            openTime = System.currentTimeMillis();
             return 0;
         }
-        return mFURenderer.onDrawFrameSingleInput(texId, width, height);
+        return mFURenderer.onDrawFrameSingleTex(texId, width, height);
     }
 
     @Override
@@ -124,7 +154,7 @@ mTXCameraRecord.setVideoProcessListener(new TXUGCRecord.VideoCustomProcessListen
     @Override
     public void onTextureDestroyed() {
         if (mFURenderer != null) {
-            mFURenderer.onSurfaceDestroyed();
+            mFURenderer.release();
         }
         mIsFirstFrame = true;
     }
@@ -137,28 +167,25 @@ mTXCameraRecord.setVideoProcessListener(new TXUGCRecord.VideoCustomProcessListen
 
 在 TCVideoRecordActivity类中，实现VideoCustomProcessListener接口，在onTextureCustomProcess回调方法中执行美颜操作（代码见上一小节）。
 
-onDrawFrameSingleInput 是单输入，输入图像buffer数组或者纹理Id，输出纹理Id
-onDrawFrameDualInput 双输入，输入图像buffer数组与纹理Id，输出纹理Id。性能上，双输入优于单输入
-
-在onDrawFrameSingleInput 与onDrawFrameDualInput 方法内，在执行底层方法之前，都会执行prepareDrawFrame()方法(执行各个特效模块的任务，将美颜参数传给底层)。
+onDrawFrameSingleTex 是单输入，输入图像纹理Id，输出纹理Id
 
 腾讯短视频支持单输入： onDrawFrameSingleInput 
 
 #### 4. 销毁
 
-调用 `FURenderer` 类的  `onSurfaceDestroyed` 方法在 SDK 结束前释放占用的资源。
+调用 `FURenderer` 类的  `release` 方法在 SDK 结束前释放占用的资源。
 
-在 TCVideoRecordActivity 类中，实现VideoCustomProcessListener接口，在onTextureDestroyed回调方法中执行FURenderer.onSurfaceDestroyed();
+在 TCVideoRecordActivity 类中，实现VideoCustomProcessListener接口，在onTextureDestroyed回调方法中执行FURenderer.release();
 
 #### 5. 切换相机
 
-调用 `FURenderer` 类 的  `onCameraChanged` 方法，用于重新为 SDK 设置参数。
+调用 `FURenderer` 类 的  `setCameraFacing` 方法，用于重新为 SDK 设置参数。
 
 在 TCVideoRecordActivity 类，onClick()方法下 R.id.btn_switch_camera 控件的点击事件中执行
 
 #### 6. 旋转手机
 
-调用 `FURenderer` 类 的  `onDeviceOrientationChanged` 方法，用于重新为 SDK 设置参数。
+调用 `FURenderer` 类 的  `setDeviceOrientation` 方法，用于重新为 SDK 设置参数。
 
 使用方法：TCVideoRecordActivity 中可见
 
@@ -191,11 +218,11 @@ public void onSensorChanged(SensorEvent event) {
 
 ### 三、接口介绍
 
-- IFURenderer 是核心接口，提供了创建、销毁、处理等功能。使用时通过 FURenderer.Builder 创建合适的 FURenderer 实例即可。
-- IModuleManager 是模块管理接口，用于创建和销毁各个功能模块，FURenderer 是其实现类。
-- IFaceBeautyModule 是美颜模块的接口，用于调整美颜参数。使用时通过 FURenderer 拿到 FaceBeautyModule 实例，调用里面的接口方法即可。
-- IStickerModule 是贴纸模块的接口，用于加载贴纸效果。使用时通过 FURenderer 拿到 StickerModule 实例，调用里面的接口方法即可。
-- IMakeModule 是美妆模块的接口，用于加载美妆效果。使用时通过 FURenderer 拿到 MakeupModule 实例，调用里面的接口方法即可。
-- IBodySlimModule 是美体模块的接口，用于调整美体参数。使用时通过 FURenderer 拿到 BodySlimModule 实例，调用里面的接口方法即可。
+- IFURenderer 是核心接口，提供了创建、销毁、渲染等接口。
+- FaceUnityDataFactory 控制四个功能模块，用于功能模块的切换，初始化
+- FaceBeautyDataFactory 是美颜业务工厂，用于调整美颜参数。
+- PropDataFactory 是道具业务工厂，用于加载贴纸效果。
+- MakeupDataFactory 是美妆业务工厂，用于加载美妆效果。
+- BodyBeautyDataFactory 是美体业务工厂，用于调整美体参数。
 
 关于 SDK 的更多详细说明，请参看 **[FULiveDemoDroid](https://github.com/Faceunity/FULiveDemoDroid/)**。如有对接问题，请联系技术支持。

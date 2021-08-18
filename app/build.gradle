@@ -4,7 +4,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.tencent.liteav.demo"
+        applicationId "com.tencent.liteav.demonew"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -26,10 +26,33 @@ android {
         jumboMode true
         javaMaxHeapSize "4g"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
 
     configurations{
         all*.exclude module: 'okhttp'
         all*.exclude module: 'okio'
+    }
+    applicationVariants.all { variant ->
+        variant.mergeAssets.configure {
+            doLast {
+                delete(fileTree(dir: outputDir,
+                        includes: ['model/ai_bgseg_green.bundle',
+                                   'model/ai_face_processor_lite.bundle',
+                                   'model/ai_hairseg.bundle',
+                                   'model/ai_hand_processor.bundle',
+                                   'model/ai_human_processor_mb_fast.bundle',
+                                   'graphics/controller_cpp.bundle',
+                                   'graphics/fuzzytoonfilter.bundle',
+                                   'graphics/tongue.bundle',
+                                   'graphics/fxaa.bundle']))
+            }
+        }
     }
 }
 

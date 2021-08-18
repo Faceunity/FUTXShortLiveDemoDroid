@@ -2,6 +2,7 @@
 
 buildscript {
     repositories {
+        maven { url 'http://maven.faceunity.com/repository/maven-public/' }
         jcenter()
         google()
     }
@@ -19,6 +20,7 @@ allprojects {
             dirs 'libs'
             dirs project(':app').file('libs')
         }
+        maven { url 'http://maven.faceunity.com/repository/maven-public/' }
         jcenter()
         google()
     }

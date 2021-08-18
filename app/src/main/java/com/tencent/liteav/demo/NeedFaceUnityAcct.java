@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
+import com.faceunity.nama.FURenderer;
 import com.tencent.liteav.demo.videorecord.util.PreferenceUtil;
 
 
@@ -47,6 +48,9 @@ public class NeedFaceUnityAcct extends Activity {
                         isOn + "");
                 startActivity(intent);
                 finish();
+                if (isOn) {
+                    new Thread(() -> FURenderer.getInstance().setup(getApplicationContext())).start();
+                }
             }
         });
 
