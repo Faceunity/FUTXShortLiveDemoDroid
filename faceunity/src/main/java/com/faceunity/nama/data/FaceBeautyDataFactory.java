@@ -1,7 +1,5 @@
 package com.faceunity.nama.data;
 
-
-
 import android.support.annotation.NonNull;
 
 import com.faceunity.core.controller.facebeauty.FaceBeautyParam;

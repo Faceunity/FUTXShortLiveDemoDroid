@@ -25,6 +25,7 @@ public class DemoApplication extends MultiDexApplication {
     String licenceUrl = "";
     String licenseKey = "";
 
+
     @Override
     public void onCreate() {
 
