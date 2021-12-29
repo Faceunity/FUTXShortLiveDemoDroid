@@ -2,6 +2,7 @@ package com.faceunity.nama;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.Log;
 
 import com.faceunity.core.callback.OperateCallback;
 import com.faceunity.core.entity.FURenderInputData;
@@ -176,6 +177,18 @@ public class FURenderer extends IFURenderer {
             setInputOrientation(cameraOrientation);
         }
         super.setCameraFacing(cameraFacing);
+    }
+
+    @Override
+    public void setDeviceOrientation(int deviceOrientation) {
+        if (cameraFacing == CameraFacingEnum.CAMERA_FRONT) {
+            if (deviceOrientation == 0 || deviceOrientation == 180) {
+                deviceOrientation = (deviceOrientation + 180) % 360;
+            }
+            super.setDeviceOrientation(deviceOrientation);
+        }else {
+            super.setDeviceOrientation(deviceOrientation);
+        }
     }
 
     /**

@@ -22,8 +22,8 @@ public class DemoApplication extends MultiDexApplication {
     private static DemoApplication instance;
 
     // 如何获取License? 请参考官网指引 https://cloud.tencent.com/document/product/454/34750
-    String licenceUrl = "http://download-1252463788.cossh.myqcloud.com/xiaoshipin/licence_android/RDM_Enterprise.license";
-    String licenseKey = "9bc74ac7bfd07ea392e8fdff2ba5678a";
+    String licenceUrl = "";
+    String licenseKey = "";
 
 
     @Override
