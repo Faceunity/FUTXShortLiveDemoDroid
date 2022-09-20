@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.faceunity.FUConfig;
+import com.faceunity.nama.utils.FuDeviceUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.rtmp.TXLiveBase;
 import com.tencent.ugc.TXUGCBase;
@@ -40,6 +42,8 @@ public class DemoApplication extends MultiDexApplication {
 
         TXLiveBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
         TXUGCBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
+
+        FUConfig.DEVICE_LEVEL = FuDeviceUtils.judgeDeviceLevel(this);
 
         closeAndroidPDialog();
 //        File file = getFilesDir();
