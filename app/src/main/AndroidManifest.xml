@@ -1,73 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tencent.liteav.demo"
-    android:versionCode="1"
-    android:versionName="1.0">
+    package="com.tencent.qcloud.xiaoshipin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
-    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
     <application
-        android:name=".DemoApplication"
+        android:name="com.tencent.qcloud.xiaoshipin.TCApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true"
+        tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- 【必须】消息收发service -->
-
-        <receiver android:name=".videoupload.impl.TVCNetWorkStateReceiver">
+        <activity
+            android:name=".play.TCVideoPreviewActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
-                //检测网络变化的acton
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-
+                <action android:name="com.tencent.liteav.demo.videopreview" />
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </receiver>
+        </activity>
 
+        <activity android:name=".userinfo.TCAboutActivity"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
 
-        <service
-            android:name="com.tencent.imsdk.session.remote.SessionService"
-            android:process=":network" />
-        <service
-            android:name="com.tencent.imsdk.session.remote.AssistService"
-            android:process=":network" />
-        <service
-            android:name="com.tencent.imsdk.session.remote.KeepAliveJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":network" />
+        <activity
+            android:name=".logoff.TCLogOffActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMain" />
 
-        <receiver android:name="com.tencent.imsdk.session.SessionBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="com.tencent.imsdk.session.boot" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="com.tencent.qcloud.qal.TASK_REMOVED" />
-            </intent-filter>
-        </receiver>
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.mainui.TCSplashActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+        </activity>
 
         <activity
             android:name=".NeedFaceUnityAcct"
@@ -83,123 +67,136 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"  />
-        <activity
-            android:name=".common.activity.QRCodeScanActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".lvb.camerapush.CameraPusherActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".lvb.camerapush.LivePublisherSurfaceActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".lvb.liveplayer.LivePlayerActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity
-            android:name=".lvb.liveplayer.LivePlayerSurfaceActivity"
-            android:screenOrientation="portrait"
-            />
 
         <activity
-            android:name=".play.VodPlayerActivity"
-            android:screenOrientation="portrait" />
+            android:name="com.tencent.qcloud.xiaoshipin.login.TCLoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/LoginTheme" />
         <activity
-            android:name=".common.activity.videopreview.TCVideoPreviewActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="com.tencent.liteav.demo.videopreview" />
-                <action android:name="android.intent.action.MAIN" />
+            android:name="com.tencent.qcloud.xiaoshipin.login.TCRegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/RegisterTheme" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.mainui.TCMainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.play.TCVodPlayerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videorecord.TCVideoRecordActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/RecordActivityTheme"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videorecord.TCVideoFollowRecordActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MixRecordActivityTheme"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videorecord.TCVideoTripleScreenActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MixRecordActivityTheme"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videopublish.TCVideoPublisherActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
             android:theme="@android:style/Theme.Translucent" />
-        <activity
-            android:name=".videopublish.TCVideoPublishActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".videopublish.TCCompressActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-            <intent-filter>
-                <action android:name="com.tencent.liteav.demo.videocompress" />
-                <action android:name="android.intent.action.MAIN" />
 
+        <activity
+            android:name=".webview.TCWebViewActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMain">
+
+            <intent-filter>
+                <action android:name="com.tencent.liteav.action.webview" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
-        <activity
-            android:name=".videocall.VideoCallActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- 配置bugly组件的APP ID，bugly组件为腾讯提供的用于crash上报和分析的开放组件，如果您不需要该组件，可以自行移除 -->
-        <meta-data
-            android:name="BUGLY_APPID"
-            android:value="928c8ef035" />
-
-        <!-- 配置bugly组件的APP渠道号 -->
-        <meta-data
-            android:name="BUGLY_APP_CHANNEL"
-            android:value="RDM版本" />
-
-        <!-- 配置bugly组件的调试模式（true或者false） -->
-        <meta-data
-            android:name="BUGLY_ENABLE_DEBUG"
-            android:value="true" />
 
         <activity
-            android:name=".lvb.liveroom.ui.LiveRoomActivity"
-            android:label="@string/title_activity_rtmp_room_demo"
-            android:screenOrientation="portrait"
-            android:theme="@style/RtmproomActivityTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".play.superplayer.SuperPlayerActivity"
+            android:name="com.umeng.qq.tencent.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videochoose.TCPicturePickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/PickerActivityTheme" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videochoose.TCTripleRecordVideoPickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/PickerActivityTheme" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videochoose.TCVideoPickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/PickerActivityTheme" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videojoiner.TCPictureJoinActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/PictureTransitionActivityStyle"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videoeditor.TCVideoCutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/EditerActivityTheme" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videoeditor.TCVideoEditerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="com.tencent.liteav.demo.play.action.float.click" />
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/EditerActivityTheme" />
+        <activity
+            android:name=".videoeditor.TCVideoEffectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/EditerActivityTheme" />
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.videojoiner.TCVideoJoinerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="com.tencent.qcloud.xiaoshipin.userinfo.TCAboutIntroductionActivity" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.tencent.qcloud.xiaoshipin.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="false" />
+        <uses-library android:name="android.test.runner" />
+
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.mainui.TCSettingActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.tencent.qcloud.xiaoshipin.mainui.TCLanguagaSettingActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".manager.LanguageChangeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".webrtc.WebRTCActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".trtc.TRTCNewActivity"
-            android:theme="@style/NewActivityTheme"
-            android:screenOrientation="portrait" />
-	<activity
-            android:name=".trtcadapter.TRTCEngineNewActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".trtc.TRTCMainActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".trtcadapter.TRTCEngineMainActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".play.TXDownloadActivity"
-            android:label="@string/title_activity_txdownload"></activity>
-        <activity
-            android:name=".videopublish.pic.TCPicturePublishActivity"
-            android:label="@string/title_activity_txdownload"></activity>
+        </receiver>
     </application>
 
 </manifest>

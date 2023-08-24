@@ -18,6 +18,7 @@ import com.faceunity.core.faceunity.FURenderManager;
 import com.faceunity.core.utils.CameraUtils;
 import com.faceunity.core.utils.FULogger;
 import com.faceunity.nama.listener.FURendererListener;
+import com.faceunity.nama.utils.FuDeviceUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,6 @@ public class FURenderer extends IFURenderer {
             synchronized (FURenderer.class) {
                 if (INSTANCE == null) {
                     INSTANCE = new FURenderer();
-                    INSTANCE.mFURenderKit = FURenderKit.getInstance();
                 }
             }
         }
@@ -62,6 +62,7 @@ public class FURenderer extends IFURenderer {
     private String BUNDLE_AI_FACE = "model" + File.separator + "ai_face_processor.bundle";
     private String BUNDLE_AI_HUMAN = "model" + File.separator + "ai_human_processor.bundle";
 
+
     /* 相机角度-朝向映射 */
     private HashMap<CameraFacingEnum, Integer> cameraOrientationMap = new HashMap<>();
 
@@ -81,7 +82,7 @@ public class FURenderer extends IFURenderer {
      */
     @Override
     public void setup(Context context) {
-        FURenderManager.setKitDebug(FULogger.LogLevel.TRACE);
+        FURenderManager.setKitDebug(FULogger.LogLevel.ERROR);
         FURenderManager.setCoreDebug(FULogger.LogLevel.ERROR);
         FURenderManager.registerFURender(context, authpack.A(), new OperateCallback() {
             @Override
@@ -89,6 +90,7 @@ public class FURenderer extends IFURenderer {
                 if (i == FURenderConfig.OPERATE_SUCCESS_AUTH) {
                     mFUAIKit.loadAIProcessor(BUNDLE_AI_FACE, FUAITypeEnum.FUAITYPE_FACEPROCESSOR);
                     mFUAIKit.loadAIProcessor(BUNDLE_AI_HUMAN, FUAITypeEnum.FUAITYPE_HUMAN_PROCESSOR);
+
                     int cameraFrontOrientation = CameraUtils.INSTANCE.getCameraOrientation(Camera.CameraInfo.CAMERA_FACING_FRONT);
                     int cameraBackOrientation = CameraUtils.INSTANCE.getCameraOrientation(Camera.CameraInfo.CAMERA_FACING_BACK);
                     cameraOrientationMap.put(CameraFacingEnum.CAMERA_FRONT, cameraFrontOrientation);
@@ -100,6 +102,7 @@ public class FURenderer extends IFURenderer {
             public void onFail(int i, @NotNull String s) {
             }
         });
+        Log.d("FURenderer", "setup: version: " + getVersion());
     }
 
     /**
@@ -131,7 +134,7 @@ public class FURenderer extends IFURenderer {
         config.setInputBufferMatrix(inputBufferMatrix);
         config.setInputTextureMatrix(inputTextureMatrix);
         config.setOutputMatrix(outputMatrix);
-        config.setCameraFacing(cameraFacing);
+        config.setCameraFacing(CameraFacingEnum.CAMERA_BACK);
         FURenderOutputData outputData = mFURenderKit.renderWithInput(inputData);
         if (outputData.getTexture() != null && outputData.getTexture().getTexId() > 0) {
             return outputData.getTexture().getTexId();
