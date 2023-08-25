@@ -26,8 +26,8 @@ abstract class IFURenderer {
     protected int inputOrientation = 0;//数据源朝向
     protected int deviceOrientation = 90;//手机设备朝向
     protected CameraFacingEnum cameraFacing = CameraFacingEnum.CAMERA_FRONT;  //数据源为相机时候->前后置相机
-    protected FUTransformMatrixEnum inputTextureMatrix = FUTransformMatrixEnum.CCROT0;//纹理旋转类型
     protected FUTransformMatrixEnum inputBufferMatrix = FUTransformMatrixEnum.CCROT0;//图象旋转类型
+    protected FUTransformMatrixEnum inputTextureMatrix = FUTransformMatrixEnum.CCROT0;//纹理旋转类型
     protected FUTransformMatrixEnum outputMatrix = FUTransformMatrixEnum.CCROT0_FLIPVERTICAL;//图象旋转类型
 
 

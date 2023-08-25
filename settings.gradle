@@ -1,9 +1,24 @@
-include ':app', ':lib_tcsuperplayer', ':faceunity'
+include ':app'
 
-include ':lib_tcvideorecord'
-include ':lib_tcvideoediter'
-include ':lib_tcvideojoiner'
-include ':lib_tccommon'
+
+include ':ugckit'
+include ':beautysettingkit'
+// 引入xmagic美颜模块
+include ':xmagickit'
+include ':faceunity'
+
+if (!liteavSourcePath.isEmpty()) {
+    apply from: new File(settingsDir, '../source_link_gradle/liteav_source_settings.gradle').getAbsolutePath()
+}
+
+if (!videoEngineSourcePath.isEmpty()) {
+    apply from: new File(settingsDir, '../source_link_gradle/videoengine_source_settings.gradle').getAbsolutePath()
+}
+
+// 重构 源码编译调试的配置
+if (!liteavRefactorSourcePath.isEmpty()) {
+    apply from: new File(settingsDir, '../source_link_gradle/liteav_refactor_source_settings.gradle').getAbsolutePath()
+}
 
 
 
