@@ -49,9 +49,6 @@ public class NeedFaceUnityAcct extends Activity {
                         isOn + "");
                 startActivity(intent);
                 finish();
-                if (isOn) {
-                    new Thread(() -> FURenderer.getInstance().setup(getApplicationContext())).start();
-                }
             }
         });
 

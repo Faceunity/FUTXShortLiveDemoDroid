@@ -16,7 +16,7 @@ android {
         multiDexEnabled = true
 
         ndk {
-            abiFilters rootProject.ext.ndkAbi
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
     }
 
@@ -69,5 +69,6 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     })
     implementation "com.bytedance.tools.codelocator:codelocator-core:2.0.3"
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
