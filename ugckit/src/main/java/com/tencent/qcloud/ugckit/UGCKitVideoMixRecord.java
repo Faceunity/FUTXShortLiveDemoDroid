@@ -167,7 +167,7 @@ public class UGCKitVideoMixRecord extends AbsVideoTripleMixRecordUI implements I
         getPlayViews().startVideo();
 
         if (mXmagicState == XMagicImpl.XmagicState.STOPPED) {
-            initXMagic();
+//            initXMagic();
         }
     }
 
@@ -574,7 +574,7 @@ public class UGCKitVideoMixRecord extends AbsVideoTripleMixRecordUI implements I
             public void run() {
                 XmagicResParser.copyRes(mActivity.getApplicationContext());
                 XmagicResParser.parseRes(mActivity.getApplicationContext());
-                initXMagic();
+//                initXMagic();
             }
         }).start();
     }
