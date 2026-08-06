@@ -52,7 +52,7 @@ public class TCApplication extends Application {
 
         UGCKit.init(this);
         FURenderer.getInstance().setup(getApplicationContext());
-        FUConfig.DEVICE_LEVEL = FuDeviceUtils.judgeDeviceLevelGPU();
+        FUConfig.DEVICE_LEVEL = FuDeviceUtils.judgeDeviceLevel(true);
         registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks(this));
     }
 
