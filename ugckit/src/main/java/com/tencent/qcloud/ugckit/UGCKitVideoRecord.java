@@ -1041,7 +1041,7 @@ public class UGCKitVideoRecord extends AbsVideoRecordUI implements
                 if (skipFrame-- > 0) {
                     return 0;
                 }
-                if (FUConfig.DEVICE_LEVEL > FuDeviceUtils.DEVICE_LEVEL_MID) {
+                if (FUConfig.DEVICE_LEVEL > FuDeviceUtils.DEVICE_LEVEL_TWO) {
                     cheekFaceNum();
                 }
                 return mFURenderer.onDrawFrameSingleTex(textureId, width, height);
